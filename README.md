@@ -2,82 +2,107 @@
 
 ## Overview
 
-Welcome to the Automated Testing Instructions Generator project! This tool leverages a multimodal Large Language Model (LLM) to generate detailed testing instructions for digital products based on screenshots and optional context. The project includes both front-end and back-end components, as well as integration with existing GUI element detection tools.
+This project leverages a multimodal Large Language Model (LLM) to generate detailed testing instructions for digital products based on screenshots and optional context. It features a Streamlit-based user interface for easy interaction and a powerful backend for processing and generating instructions.
 
 ## Features
 
-- **Front-End:**
-  - Text box for optional context input.
-  - Multi-image uploader for uploading screenshots.
-  - Button to trigger the generation of testing instructions.
+- **Streamlit-based UI:**
+  - Text input for optional context
+  - Multi-image uploader for screenshots
+  - Button to trigger instruction generation
 
-- **Back-End:**
-  - Integration with a multimodal LLM to process images and text.
-  - Generation of detailed testing instructions, including:
-    - Description of the test case.
-    - Pre-conditions.
-    - Step-by-step testing instructions.
-    - Expected results.
+- **Backend Processing:**
+  - Integration with a multimodal LLM
+  - Generation of detailed testing instructions
 
-- **Demonstration:**
-  - The tool will be demonstrated using the RedBus mobile app (or another app) to generate testing instructions for features like source and destination selection, bus and seat selection, etc.
+- **Output:**
+  - Test case description
+  - Pre-conditions
+  - Step-by-step testing instructions
+  - Expected results
 
 ## Getting Started
 
-### 1. Front-End Development
+### Prerequisites
 
-1. **Setup Input Fields:**
-   - **Text Box:** Create a text box for users to input optional context.
-   - **Multi-Image Uploader:** Implement functionality to upload multiple screenshots.
-   - **Button:** Add a button labeled "Describe Testing Instructions" to trigger instruction generation.
+- Python 3.7+
+- pip
 
-2. **Tools & Technologies:**
-   - HTML/CSS/JavaScript for basic implementation.
-   - React or Vue.js for dynamic components (optional).
+### Installation
 
-### 2. Back-End Development
+1. Clone the repository:
+   ```
+   git clone https://github.com/your-username/automated-testing-instructions-generator.git
+   cd automated-testing-instructions-generator
+   ```
 
-1. **Multimodal LLM Integration:**
-   - Use a pre-trained multimodal LLM to handle both images and text.
-   - **Model Loading:**
-     ```python
-     from transformers import AutoModelForCausalLM, AutoTokenizer
-     import torch
+2. Install dependencies:
+   ```
+   pip install -r requirements.txt
+   ```
 
-     tokenizer = AutoTokenizer.from_pretrained('EleutherAI/gpt-neox-20b')
-     model = AutoModelForCausalLM.from_pretrained(
-       'mosaicml/mpt-7b-chat',
-       torch_dtype=torch.bfloat16,
-       device_map="auto"
-     )
-     ```
-   - **Pipeline Creation:**
-     ```python
-     from transformers import pipeline
-     from langchain.llms import HuggingFacePipeline
+### Running the Application
 
-     pipe = pipeline('text-generation', model=model, tokenizer=tokenizer)
-     local_llm = HuggingFacePipeline(pipeline=pipe)
-     ```
+1. Start the Streamlit app:
+   ```
+   streamlit run app.py
+   ```
 
-2. **Prompt Templates:**
-   - Create prompts to generate test cases:
-     ```python
-     from langchain.prompts import PromptTemplate
-     from langchain.chains import LLMChain
+2. Open your browser and navigate to the URL provided by Streamlit (usually `http://localhost:8501`).
 
-     prompt_template = PromptTemplate(
-       input_variables=["product"],
-       template="Given a {product} with a single login button. Write test scenarios about the {product}?"
-     )
-     chain = LLMChain(llm=local_llm, prompt=prompt_template)
-     ```
+## Usage
 
-3. **Integration with UI:**
-   - Connect the back-end model with the front-end to process user inputs and generate instructions.
+1. (Optional) Enter context in the text box.
+2. Upload screenshots of the digital product.
+3. Click "Generate Testing Instructions".
+4. View the generated instructions in the Streamlit UI.
 
-### 3. UIED for GUI Element Detection
+## Backend Details
 
-1. **Install UIED Dependencies:**
-   ```bash
-   pip install opencv-python-headless pandas
+The backend uses a multimodal LLM to process both images and text. Here's a brief overview of the setup:
+
+```python
+from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
+from langchain.llms import HuggingFacePipeline
+import torch
+
+# Model and tokenizer setup
+tokenizer = AutoTokenizer.from_pretrained('EleutherAI/gpt-neox-20b')
+model = AutoModelForCausalLM.from_pretrained(
+  'mosaicml/mpt-7b-chat',
+  torch_dtype=torch.bfloat16,
+  device_map="auto"
+)
+
+# Pipeline creation
+pipe = pipeline('text-generation', model=model, tokenizer=tokenizer)
+local_llm = HuggingFacePipeline(pipeline=pipe)
+```
+
+## GUI Element Detection
+
+This project integrates UIED for GUI element detection. To use UIED:
+
+1. Replace the Google OCR key in `detect_text/ocr.py` with your own.
+2. Run single image testing:
+   ```
+   python run_single.py
+   ```
+3. For batch testing:
+   ```
+   python run_batch.py
+   ```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Thanks to the creators of the multimodal LLM and UIED used in this project.
+- Streamlit for providing an excellent framework for building data apps.
+
