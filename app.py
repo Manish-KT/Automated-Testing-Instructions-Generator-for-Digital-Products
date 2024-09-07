@@ -57,10 +57,3 @@ st.write("""
 Developed by Manish Kumar Tailor | Powered by **Multimodal LLMs**
 """)
 
-"""
-to save to environment variable:
-$env:REPLICATE_API_TOKEN = "r8_AITBnQOgHe8RmYaYw7hyVmyNbcWjO0p397Tox"
-
-to get teh api key:
-$env:REPLICATE_API_TOKEN
-"""
