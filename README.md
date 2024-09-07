@@ -29,7 +29,7 @@ ScreenTest AI is an innovative tool that leverages the power of AI to automatica
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/screentest-ai.git
+   git clone https://github.com/Manish-KT/Automated-Testing-Instructions-Generator-for-Digital-Products.git
    cd screentest-ai
    ```
 
