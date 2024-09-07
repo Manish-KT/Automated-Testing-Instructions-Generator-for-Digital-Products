@@ -87,7 +87,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact
 
-For any queries or suggestions, please open an issue in this repository or contact the maintainer at [your-email@example.com].
+For any queries or suggestions, please open an issue in this repository or contact the maintainer at [[WEBSITE](https://manish-kt.github.io/portfolio-website/)].
 
 ---
 
