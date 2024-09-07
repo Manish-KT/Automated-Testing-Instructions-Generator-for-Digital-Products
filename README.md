@@ -1,101 +1,79 @@
-# Automated Testing Instructions Generator for Digital Products
+# ScreenTest AI
 
-## Overview
+## Automated Test Case Generation from UI Screenshots
 
-This project leverages a multimodal Large Language Model (LLM) to generate detailed testing instructions for digital products based on screenshots and optional context. It features a Streamlit-based user interface for easy interaction and a powerful backend for processing and generating instructions.
+ScreenTest AI is an innovative tool that leverages the power of AI to automatically generate test cases from UI screenshots. By combining UI element detection and large language models, it streamlines the process of creating comprehensive test scenarios for digital products.
 
 ## Features
 
-- **Streamlit-based UI:**
-  - Text input for optional context
-  - Multi-image uploader for screenshots
-  - Button to trigger instruction generation
+- **UI Element Detection**: Automatically identifies UI components from uploaded screenshots.
+- **Test Case Generation**: Creates detailed test cases based on detected UI elements and optional context.
+- **User-Friendly Interface**: Easy-to-use Streamlit web application for uploading screenshots and viewing results.
 
-- **Backend Processing:**
-  - Integration with a multimodal LLM
-  - Generation of detailed testing instructions
+## How It Works
 
-- **Output:**
-  - Test case description
-  - Pre-conditions
-  - Step-by-step testing instructions
-  - Expected results
+1. **Upload Screenshots**: Users can upload multiple screenshots of the digital product they want to test.
+2. **Provide Context**: Optional additional information can be provided to enhance test case generation.
+3. **UI Analysis**: The system analyzes the screenshots to detect UI elements using computer vision techniques.
+4. **Test Case Generation**: Based on the detected UI elements and provided context, the system generates detailed test cases.
 
-## Getting Started
+## Technologies Used
 
-### Prerequisites
+- **Frontend**: Streamlit
+- **UI Element Detection**: [UIED (UI Element Detection)](https://github.com/MulongXie/UIED)
+- **Test Case Generation**: LangChain and Large Language Models (based on [this Kaggle notebook](https://www.kaggle.com/code/sapal6/langchain-and-llms-for-automating-software-testing))
+- **Image Processing**: OpenCV, Tesseract OCR
+- **Language Model**: MPT-7B-Chat (via Hugging Face Transformers)
 
-- Python 3.7+
-- pip
-
-### Installation
+## Installation
 
 1. Clone the repository:
    ```
-   git clone https://github.com/your-username/automated-testing-instructions-generator.git
-   cd automated-testing-instructions-generator
+   git clone https://github.com/yourusername/screentest-ai.git
+   cd screentest-ai
    ```
 
-2. Install dependencies:
+2. Install the required dependencies:
    ```
    pip install -r requirements.txt
    ```
 
-### Running the Application
+3. Install Tesseract OCR:
+   - For Windows: Download and install from [here](https://github.com/UB-Mannheim/tesseract/wiki)
+   - For MacOS: `brew install tesseract`
+   - For Linux: `sudo apt-get install tesseract-ocr`
+
+4. Set up UIED:
+   - Follow the installation instructions in the [UIED repository](https://github.com/MulongXie/UIED)
+
+## Usage
 
 1. Start the Streamlit app:
    ```
    streamlit run app.py
    ```
 
-2. Open your browser and navigate to the URL provided by Streamlit (usually `http://localhost:8501`).
+2. Open your web browser and navigate to the URL provided by Streamlit (usually `http://localhost:8501`).
 
-## Usage
+3. Upload screenshots of your digital product.
 
-1. (Optional) Enter context in the text box.
-2. Upload screenshots of the digital product.
-3. Click "Generate Testing Instructions".
-4. View the generated instructions in the Streamlit UI.
+4. (Optional) Provide additional context in the text area.
 
-## Backend Details
+5. Click "Describe Testing Instructions" to generate test cases.
 
-The backend uses a multimodal LLM to process both images and text. Here's a brief overview of the setup:
+6. View the detected UI elements and generated test cases.
 
-```python
-from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
-from langchain.llms import HuggingFacePipeline
-import torch
+## Project Structure
 
-# Model and tokenizer setup
-tokenizer = AutoTokenizer.from_pretrained('EleutherAI/gpt-neox-20b')
-model = AutoModelForCausalLM.from_pretrained(
-  'mosaicml/mpt-7b-chat',
-  torch_dtype=torch.bfloat16,
-  device_map="auto"
-)
-
-# Pipeline creation
-pipe = pipeline('text-generation', model=model, tokenizer=tokenizer)
-local_llm = HuggingFacePipeline(pipeline=pipe)
-```
-
-## GUI Element Detection
-
-This project integrates UIED for GUI element detection. To use UIED:
-
-1. Replace the Google OCR key in `detect_text/ocr.py` with your own.
-2. Run single image testing:
-   ```
-   python run_single.py
-   ```
-3. For batch testing:
-   ```
-   python run_batch.py
-   ```
+- `app.py`: Main Streamlit application
+- `ui_element_detector.py`: UI element detection logic using UIED
+- `test_case_generator.py`: Test case generation logic using LangChain and LLMs
+- `requirements.txt`: List of Python dependencies
+- `README.md`: This file
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions to ScreenTest AI are welcome! Please feel free to submit pull requests, create issues or spread the word.
 
 ## License
 
@@ -103,6 +81,14 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- Thanks to the creators of the multimodal LLM and UIED used in this project.
-- Streamlit for providing an excellent framework for building data apps.
+- [UIED](https://github.com/MulongXie/UIED) for providing the UI element detection framework
+- [LangChain](https://github.com/hwchase17/langchain) for simplifying the integration of language models
+- The authors of the [Kaggle notebook](https://www.kaggle.com/code/sapal6/langchain-and-llms-for-automating-software-testing) on automating software testing with LLMs
 
+## Contact
+
+For any queries or suggestions, please open an issue in this repository or contact the maintainer at [your-email@example.com].
+
+---
+
+Developed by Manish Kumar Tailor | Powered by **Multimodal LLMs**

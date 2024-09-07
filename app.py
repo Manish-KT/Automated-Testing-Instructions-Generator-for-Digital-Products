@@ -1,6 +1,8 @@
 import streamlit as st
-import requests
+import os
 from PIL import Image
+from test_case_generator import main as generate_test_cases
+from ui_element_detector import main as detect_ui_elements
 
 # Project Title and Description
 st.title("ScreenTest AI")
@@ -23,30 +25,38 @@ uploaded_files = st.file_uploader("Upload Screenshots (PNG/JPG)", accept_multipl
 
 # Analyze Button
 if st.button("Describe Testing Instructions") and uploaded_files:
+    # Create a temporary directory to store uploaded images
+    if not os.path.exists("./temp_images"):
+        os.makedirs("./temp_images")
+
     for uploaded_file in uploaded_files:
         # Display the uploaded image
         image = Image.open(uploaded_file)
         st.image(image, caption=f"Uploaded Screenshot: {uploaded_file.name}", use_column_width=True)
 
-        # Store all the uploaded images in to a directory
-        image.save(f"./Images/{uploaded_file.name}")
-        
-        # Placeholder for integration with Multimodal LLM
-        # API call to Multimodal LLM to process the image and optional context (replace this with your own LLM call)
-        # Assuming we have an API that processes the screenshot and context
-        # result = requests.post(LLM_API_URL, files={'image': uploaded_file}, data={'context': context})
-        
-        # For now, let's simulate a response
-        st.write("### Test Case for: ", uploaded_file.name)
-        st.write("""
-        - **Description**: Testing the [feature] visible in the screenshot.
-        - **Preconditions**: Ensure [setup details] are completed before testing.
-        - **Steps**:
-          1. Step 1: Interact with [UI Element].
-          2. Step 2: Click on [Button] to initiate the process.
-          3. Step 3: Verify [condition] is met.
-        - **Expected Result**: The [result] should be displayed/processed correctly.
-        """)
+        # Save the image to the temporary directory
+        image_path = f"./temp_images/{uploaded_file.name}"
+        image.save(image_path)
+
+    # Detect UI elements
+    ui_elements = detect_ui_elements("./temp_images")
+
+    # Display detected UI elements
+    st.write("### Detected UI Elements:")
+    for element in ui_elements:
+        st.write(f"- Type: {element['type']}, Text: {element['text']}")
+
+    # Generate test cases
+    test_cases = generate_test_cases(context, len(uploaded_files))
+
+    # Display generated test cases
+    st.write("### Generated Test Cases:")
+    st.code(test_cases, language="gherkin")
+
+    # Clean up temporary directory
+    for file in os.listdir("./temp_images"):
+        os.remove(os.path.join("./temp_images", file))
+    os.rmdir("./temp_images")
 
 else:
     st.info("Upload screenshots and provide optional context to generate test cases.")
@@ -56,4 +66,3 @@ st.write("""
 ---
 Developed by Manish Kumar Tailor | Powered by **Multimodal LLMs**
 """)
-
